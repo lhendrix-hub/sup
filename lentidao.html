@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de E-mails</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gerador de E-mails</h1>
+        <label for="cliente">Nome do Cliente:</label>
+        <input type="text" id="cliente" placeholder="Nome do Cliente">
+        
+        <label for="email">Endereço de E-mail:</label>
+        <input type="email" id="email" placeholder="E-mail do Cliente">
+        
+        <label for="nivel">Nível:</label>
+        <select id="nivel">
+            <option value="nao-grave">Não Grave</option>
+            <option value="grave">Grave</option>
+        </select>
+        
+        <label for="data">Data:</label>
+        <input type="date" id="data">
+        
+        <label for="hora">Hora de Início:</label>
+        <input type="time" id="hora" step="600"> <!-- Relógio para selecionar horas e minutos -->
+        
+        <label for="assunto">Assunto: Suporte Pega Plantão - Instabilidade </label>
+        
+        <button onclick="gerarEmail()">Gerar E-mail</button>
+        <button onclick="copiarEmail()" id="copiar" disabled>Copiar para Área de Transferência</button>
+
+        <p id="resultado"></p>
+    </div>
+
+    <script>
+        function formatarData(data) {
+            const [ano, mes, dia] = data.split('-');
+            return `${dia}/${mes}/${ano}`;
+        }
+
+        function gerarEmail() {
+            const cliente = document.getElementById('cliente').value;
+            const data = document.getElementById('data').value;
+            const hora = document.getElementById('hora').value;
+            const nivel = document.getElementById('nivel').value;
+            let emailText = '';
+            
+            if (!cliente) {
+                alert("Por favor, insira o nome do cliente.");
+                return;
+            }
+
+            const dataFormatada = formatarData(data);
+            
+            if (nivel === 'nao-grave') {
+                emailText = `Olá ${cliente},\n\nNo dia ${dataFormatada} tivemos momentos de lentidão e instabilidade do site a partir das ${hora}. Lamentamos qualquer inconveniente que isso possa ter causado e queremos informá-los de que nossa equipe agiu prontamente desde o início e tomou as medidas necessárias para resolver essa situação.\n\nCordialmente,\n`;
+            } else {
+                emailText = `Olá ${cliente},\n\nNo dia ${dataFormatada} tivemos uma forte lentidão por alguns minutos, alguns usuários foram impactados por uma baixa performance dos servidores. Lamentamos qualquer inconveniente que isso possa ter causado e queremos informá-los de que nossa equipe agiu prontamente desde o início e tomou medidas para resolver essa situação.\n\nCordialmente,\n`;
+            }
+
+            document.getElementById('resultado').innerText = emailText;
+            document.getElementById('copiar').disabled = false;
+        }
+
+        function copiarEmail() {
+            const texto = document.getElementById('resultado').innerText;
+            navigator.clipboard.writeText(texto).then(() => {
+                alert('Texto copiado para a área de transferência!');
+            });
+        }
+    </script>
+</body>
+</html>
