@@ -6,8 +6,18 @@
     <title>Gerador de E-mails</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+        h1 {
+            color: #1e88e5;
+        }
+
         .container {
             max-width: 500px;
             margin: auto;
@@ -15,18 +25,32 @@
         label {
             display: block;
             margin-top: 10px;
+            color: #333;
             
         }
         button {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #4CAF50;
+           background-color: #1e88e5;
             color: white;
+            padding: 10px 15px;
             border: none;
+            border-radius: 4px;
             cursor: pointer;
         }
         button:disabled {
             background-color: #ddd;
+        }
+        .message {
+            white-space: pre-wrap;
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-family: Consolas, "Courier New", monospace;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            overflow-x: auto;
         }
     </style>
 </head>
@@ -58,8 +82,8 @@
 
         <p id="resultado"></p>
     </div>
-
-    <script>
+    
+    <script class="message">
         function formatarData(data) {
             const [ano, mes, dia] = data.split('-');
             return `${dia}/${mes}/${ano}`;
@@ -78,7 +102,7 @@
             }
 
             const dataFormatada = formatarData(data);
-            
+        
             if (nivel === 'nao-grave') {
                 emailText = `Olá ${cliente},\n\nNo dia ${dataFormatada} tivemos momentos de lentidão e instabilidade do site a partir das ${hora}. Lamentamos qualquer inconveniente que isso possa ter causado e queremos informá-los de que nossa equipe agiu prontamente desde o início e tomou as medidas necessárias para resolver essa situação.\n\nCordialmente,\n`;
             } else {
@@ -96,5 +120,6 @@
             });
         }
     </script>
+ 
 </body>
 </html>
