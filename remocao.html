@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de E-mail</title>
+    <style>
+        body {
+            font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #1e88e5;
+        }
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #333;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="email"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="file"] {
+            margin-top: 10px;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #1e88e5;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #1565c0;
+        }
+        .hidden {
+            display: none;
+        }
+        .message {
+            white-space: pre-wrap;
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-family: Consolas, "Courier New", monospace;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            overflow-x: auto;
+        }
+        .container {
+            margin: 20px;
+        }
+        .info-text {
+            font-weight: bold;
+            font-style: italic;
+            margin-top: 10px;
+            color: #333;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+        .back-button {
+            background-color: #1e88e5;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .back-button:hover {
+            background-color: #1565c0;
+        }
+        .copy-button {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background-color: #ffcc00;
+            color: #000;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .copy-button:hover {
+            background-color: #ffeb3b;
+        }
+        .icon-sm {
+            width: 24px;
+            height: 24px;
+        }
+    </style>
+    <script>
+        function toggleForm() {
+            const situation = document.getElementById('situation').value;
+            const professionalFields = document.getElementById('professional-fields');
+            const companyFields = document.getElementById('company-fields');
+            const professionalMessage = document.getElementById('professional-message');
+            const companyMessage = document.getElementById('company-message');
+            const professionalInfo = document.getElementById('professional-info');
+            const companyInfo = document.getElementById('company-info');
+
+            if (situation === 'Profissional') {
+                professionalFields.classList.remove('hidden');
+                companyFields.classList.add('hidden');
+                professionalMessage.classList.remove('hidden');
+                companyMessage.classList.add('hidden');
+                professionalInfo.classList.remove('hidden');
+                companyInfo.classList.add('hidden');
+            } else if (situation === 'Empresa') {
+                professionalFields.classList.add('hidden');
+                companyFields.classList.remove('hidden');
+                professionalMessage.classList.add('hidden');
+                companyMessage.classList.remove('hidden');
+                professionalInfo.classList.add('hidden');
+                companyInfo.classList.remove('hidden');
+            } else {
+                professionalFields.classList.add('hidden');
+                companyFields.classList.add('hidden');
+                professionalMessage.classList.add('hidden');
+                companyMessage.classList.add('hidden');
+                professionalInfo.classList.add('hidden');
+                companyInfo.classList.add('hidden');
+            }
+        }
+
+        function generateEmail() {
+            const situation = document.getElementById('situation').value;
+            let errorMessage = '';
+            if (situation === 'Profissional') {
+                const companyName = document.getElementById('company-name').value;
+                if (!companyName) errorMessage += 'Nome da Empresa é obrigatório.\n';
+                if (errorMessage) {
+                    alert(errorMessage);
+                    return;
+                }
+                document.getElementById('email-content-professional').innerText = 
+                    `Olá,\n\nAcusamos o recebimento de sua solicitação/reclamação.\n\nInformamos que a Pega Plantão segue à risca as normativas da Lei Geral de Proteção de Dados.\n\nNa qualidade de Operadores de Dados, estamos encaminhando a sua solicitação aos responsáveis pela empresa ${companyName}, controladora de seus dados, a fim de que sejam tomadas as devidas providências para solução da demanda em um prazo razoável.\n\nAo mesmo tempo, estamos dando ciência de sua situação ao nosso Encarregado de Dados para acompanhamento da sua solicitação.\n\nQualquer dúvida, estamos à disposição.\nCordialmente,`;
+            } else if (situation === 'Empresa') {
+                const name = document.getElementById('name').value;
+                const crm = document.getElementById('crm').value;
+                const uf = document.getElementById('uf').value;
+                const email = document.getElementById('email').value;
+                const image = document.getElementById('image').files[0];
+
+                if (!name) errorMessage += 'Nome é obrigatório.\n';
+                if (!crm) errorMessage += 'CRM é obrigatório.\n';
+                if (!uf) errorMessage += 'UF é obrigatório.\n';
+                if (!email) errorMessage += 'E-mail é obrigatório.\n';
+                if (errorMessage) {
+                    alert(errorMessage);
+                    return;
+                }
+
+                if (image) {
+                    let reader = new FileReader();
+                    reader.onloadend = function () {
+                        const imageBase64 = reader.result;
+                        document.getElementById('email-content-company').innerHTML = 
+                            `Prezado cliente,\n\nInformamos que a Pega Plantão segue à risca as normativas da Lei Geral de Proteção de Dados e, em cumprimento à Políticas Interna de Segurança e Política de Contenção e Resposta a Incidentes, estamos encaminhando a solicitação/reclamação de usuário/titular, cujos dados pessoais são controlados por sua empresa.\n\nNome: ${name}\nCRM/CRMUF: ${crm}/${uf}\nE-mail: ${email}\n<img src="${imageBase64}" alt="Imagem Anexada">\n\nSolicitamos que seja dada uma solução ao problema em até 05 (cinco) dias úteis, comunicando-se a esta operadora de dados as medidas tomadas, sob pena de serem adotadas as medidas internas cabíveis, que poderão resultar, a depender da situação, na modificação, anonimização ou exclusão do dado do titular requerente.\n\nPara ciência da situação de possível incidente, segue em cópia nosso Encarregado de Dados.\n\n*A remoção de um profissional não impacta na perda de nenhum dado do passado, como plantões ou relatórios, estas informações ainda estarão disponíveis para conferência.\n\nQualquer dúvida, estamos à disposição.\nCordialmente,`;
+                    };
+                    reader.readAsDataURL(image);
+                } else {
+                    document.getElementById('email-content-company').innerText = 
+                        `Prezado cliente,\n\nInformamos que a Pega Plantão segue à risca as normativas da Lei Geral de Proteção de Dados e, em cumprimento à Políticas Interna de Segurança e Política de Contenção e Resposta a Incidentes, estamos encaminhando a solicitação/reclamação de usuário/titular, cujos dados pessoais são controlados por sua empresa.\n\nNome: ${name}\nCRM/CRMUF: ${crm}+${uf}\nE-mail: ${email}\n\nSolicitamos que seja dada uma solução ao problema em até 05 (cinco) dias úteis, comunicando-se a esta operadora de dados as medidas tomadas, sob pena de serem adotadas as medidas internas cabíveis, que poderão resultar, a depender da situação, na modificação, anonimização ou exclusão do dado do titular requerente.\n\nPara ciência da situação de possível incidente, segue em cópia nosso Encarregado de Dados.\n\n*A remoção de um profissional não impacta na perda de nenhum dado do passado, como plantões ou relatórios, estas informações ainda estarão disponíveis para conferência.\n\nQualquer dúvida, estamos à disposição.\nCordialmente,`;
+                }
+            }
+
+            document.getElementById('back-button').classList.remove('hidden');
+            document.getElementById('copy-button-professional').classList.remove('hidden');
+            document.getElementById('copy-button-company').classList.remove('hidden');
+        }
+
+        function resetForm() {
+            document.getElementById('email-form').reset();
+            toggleForm();
+            document.getElementById('email-content-professional').innerText = '';
+            document.getElementById('email-content-company').innerText = '';
+            document.getElementById('back-button').classList.add('hidden');
+            document.getElementById('copy-button-professional').classList.add('hidden');
+            document.getElementById('copy-button-company').classList.add('hidden');
+        }
+
+        function copyToClipboard() {
+            const situation = document.getElementById('situation').value;
+            const emailContent = situation === 'Profissional' ? document.getElementById('email-content-professional').innerText : document.getElementById('email-content-company').innerText;
+
+            navigator.clipboard.writeText(emailContent).then(() => {
+                alert('Conteúdo copiado para a área de transferência!');
+            }).catch(err => {
+                console.error('Falha ao copiar!', err);
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Formulário de E-mail</h1>
+        <form id="email-form">
+            <label for="situation">Situação:</label>
+            <select id="situation" name="situation" onchange="toggleForm()">
+                <option value="">Selecione</option>
+                <option value="Profissional">Profissional</option>
+                <option value="Empresa">Empresa</select><br>
+
+            <div id="professional-fields" class="hidden">
+                <label for="company-name">Nome da Empresa:</label>
+                <input type="text" id="company-name" name="company-name" maxlength="100"><br>
+                <div id="professional-info" class="info-text hidden">
+                    Profissional: Resposta ao titular de dados em cópia dpo@solucaodevalor.com.br
+                </div>
+            </div>
+
+            <div id="company-fields" class="hidden">
+                <label for="name">Nome:</label>
+                <input type="text" id="name" name="name" maxlength="100"><br>
+
+                <label for="crm">CRM:</label>
+                <input type="number" id="crm" name="crm">
+                <label for="uf">UF:</label>
+                <select id="uf" name="uf">
+                    <option value="">Selecione</option>
+                    <option value="AC">AC</option>
+                    <option value="AL">AL</option>
+                    <option value="AP">AP</option>
+                    <option value="AM">AM</option>
+                    <option value="BA">BA</option>
+                    <option value="CE">CE</option>
+                    <option value="DF">DF</option>
+                    <option value="ES">ES</option>
+                    <option value="GO">GO</option>
+                    <option value="MA">MA</option>
+                    <option value="MT">MT</option>
+                    <option value="MS">MS</option>
+                    <option value="MG">MG</option>
+                    <option value="PA">PA</option>
+                    <option value="PB">PB</option>
+                    <option value="PR">PR</option>
+                    <option value="PE">PE</option>
+                    <option value="PI">PI</option>
+                    <option value="RJ">RJ</option>
+                    <option value="RN">RN</option>
+                    <option value="RS">RS</option>
+                    <option value="RO">RO</option>
+                    <option value="RR">RR</option>
+                    <option value="SC">SC</option>
+                    <option value="SP">SP</option>
+                    <option value="SE">SE</option>
+                    <option value="TO">TO</option>
+                </select><br>
+
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" name="email"><br>
+
+                <label for="image">Imagem:</label>
+                <input type="file" id="image" name="image" accept="image/*"><br>
+                <div id="company-info" class="info-text hidden">
+                    Empresa: Encaminhamento da demanda para o cliente resolver em cópia dpo@solucaodevalor.com.br
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button type="button" onclick="generateEmail()">Gerar E-mail</button>
+                <button type="button" id="copy-button-professional" class="copy-button hidden" onclick="copyToClipboard()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" class="icon-sm">
+                        <path fill="currentColor" fill-rule="evenodd" d="M7 5a3 3 0 0 1 3-3h9a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-2v2a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3v-9a3 3 0 0 1 3-3h2zm2 2h5a3 3 0 0 1 3 3v5h2a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1h-9a1 1 0 0 0-1 1zM5 9a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-9a1 1 0 0 0-1-1z" clip-rule="evenodd"></path>
+                    </svg>
+                    Copiar E-mail
+                </button>
+              
+            </div>
+        </form>
+
+        <div id="professional-message" class="hidden">
+            <h2>Mensagem Profissional</h2>
+            <pre id="email-content-professional" class="message"></pre>
+        </div>
+
+        <div id="company-message" class="hidden">
+            <h2>Mensagem Empresa</h2>
+            <pre id="email-content-company" class="message"></pre>
+        </div>
+
+        <button id="back-button" class="hidden back-button" onclick="resetForm()">Voltar à página inicial</button>
+    </div>
+</body>
+</html>
